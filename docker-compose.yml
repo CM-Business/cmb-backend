@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  cmbusiness_db:
+    image: postgres
+    container_name: cmbusiness_db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=cmbusiness
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=cmbusiness
+    volumes:
+      - pgdata:/data/postgres
+volumes:
+  pgdata:
+    driver: local

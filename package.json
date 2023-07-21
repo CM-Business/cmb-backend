@@ -6,6 +6,18 @@
   "engines": {
     "node": ">= 18.12 <19"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,mts}": [
+      "prettier --config .prettierrc --write",
+      "eslint --fix"
+    ]
+  },
   "devDependencies": {
     "@types/jest": "~29.5",
     "@types/node": "~18",
@@ -14,8 +26,11 @@
     "eslint": "~8.38",
     "eslint-config-prettier": "~8.8",
     "eslint-plugin-jest": "~27.2",
+    "husky": "^8.0.3",
     "jest": "~29.5",
+    "lint-staged": "^13.2.3",
     "prettier": "~2.8",
+    "prisma": "^5.0.0",
     "rimraf": "~5.0",
     "ts-api-utils": "~0.0.44",
     "ts-jest": "~29.1",
@@ -31,11 +46,17 @@
     "lint": "eslint . --ext .ts --ext .mts",
     "test": "jest --coverage",
     "prettier": "prettier --config .prettierrc --write .",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "prisma db seed --preview-feature",
+    "prisma:studio": "prisma studio",
+    "prisma:reset": "prisma migrate reset --preview-feature"
   },
   "author": "Jakub Synowiec <jsynowiec@users.noreply.github.com>",
   "license": "Apache-2.0",
   "dependencies": {
+    "@prisma/client": "^5.0.0",
     "tslib": "~2.5"
   },
   "volta": {

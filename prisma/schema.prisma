@@ -1,0 +1,32 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  votes         Vote[]   @relation("VotesGiven")
+  receivedVotes Vote[]   @relation("VotesReceived")
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  value     Int // You can define this field based on your voting system (e.g., 1 for upvote, -1 for downvote, etc.)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  voter     User     @relation("VotesGiven", fields: [voterId], references: [id])
+  user      User     @relation("VotesReceived", fields: [userId], references: [id])
+  voterId   Int
+  userId    Int
+}
