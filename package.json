@@ -32,6 +32,7 @@
     "prebuild": "npm run lint",
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -w -p tsconfig.json",
+    "check-types": "tsc --noEmit",
     "build:release": "npm run clean && tsc -p tsconfig.release.json",
     "lint": "eslint . --ext .ts --ext .mts",
     "test": "jest --coverage",
@@ -42,6 +43,12 @@
     "prisma:seed": "prisma db seed --preview-feature",
     "prisma:studio": "prisma studio",
     "prisma:reset": "prisma migrate reset --preview-feature"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
   },
   "author": "Jakub Synowiec <jsynowiec@users.noreply.github.com>",
   "license": "Apache-2.0",
