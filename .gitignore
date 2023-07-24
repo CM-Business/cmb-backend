@@ -29,3 +29,5 @@ build/
 .DS_Store
 
 .husky
+
+_dev/

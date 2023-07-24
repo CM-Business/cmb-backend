@@ -6,11 +6,12 @@ function discord(): void {
             clientID: process.env.DISCORD_CLIENT_ID,
             clientSecret: process.env.DISCORD_CLIENT_SECRET,
             callbackURL: "/auth/redirect",
-            scope: ['identify']
-        }, async (accessToken, refreshToken, profile, done) => {
-            console.log(accessToken, refreshToken, profile, done)
+            scope: ['identify', 'email']
+        }, async (_, refreshToken, profile, done) => {
+            profile.refreshToken = refreshToken;
+
             try {
-                done(null, { oi: "oi" })
+                done(null, profile)
             } catch (err) {
                 done(err, null)
             }

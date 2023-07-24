@@ -1,17 +1,22 @@
-import { Request, Response } from "express";
 import passport from 'passport'
+import { OnAuthController } from "../useCases/user/OnAuth/OnAuthController.js";
+import { Request, Response } from "express";
+import { verifyToken } from "../middlewares/token.js";
+
 
 function authRouterHandle(router): void {
     router.get("/auth", passport.authenticate("discord"));
 
-    router.get('/auth/redirect', passport.authenticate('discord', {
-        failureRedirect: '/'
-    }), function (request: Request, response: Response) {
+    router.get("/testando", verifyToken, (request: Request, response: Response) => {
         request
 
-        console.log("Foi chamado a rota auth/redirect com o método GET")
+        response.send("")
+    });
 
-        response.json({ oi: 'oi' });
+    router.get('/auth/redirect', passport.authenticate('discord', {
+        failureRedirect: '/'
+    }), async (request: Request, response: Response) => {
+        return await (new OnAuthController).handle(request, response)
     });
 }
 
