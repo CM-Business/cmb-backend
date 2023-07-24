@@ -3,8 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 import { MUser } from '../models/mUser.js';
 import { User } from '../types/index.js';
 
-function cookieExtractor(req) {
-    var token = null;
+function cookieExtractor(req): string {
+    let token = null;
     if (req.cookies) {
         token = req.cookies['access_token'];
     }

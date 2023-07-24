@@ -1,5 +1,5 @@
 export type Vote = {
-
+    id: number
 }
 
 export type User = {

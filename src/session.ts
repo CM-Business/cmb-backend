@@ -1,6 +1,17 @@
 import crypto from 'crypto'
 
-function createSessionObject() {
+type Cookie = {
+    secure: boolean
+}
+
+type SessionObject = {
+    secret: string,
+    resave: boolean,
+    saveUninitialized: boolean,
+    cookie: Cookie
+}
+
+function createSessionObject(): SessionObject {
     return {
         secret: crypto.randomBytes(64).toString('hex'),
         resave: false,
