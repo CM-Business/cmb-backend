@@ -13,20 +13,46 @@ generator client {
 model User {
   id            Int      @id @default(autoincrement())
   username      String
+  avatar        String
   email         String   @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
   votes         Vote[]   @relation("VotesGiven")
   receivedVotes Vote[]   @relation("VotesReceived")
+  guilds        UserGuild[]
+
+  @@map("users")
 }
 
 model Vote {
-  id        Int      @id @default(autoincrement())
-  value     Int // You can define this field based on your voting system (e.g., 1 for upvote, -1 for downvote, etc.)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  voter     User     @relation("VotesGiven", fields: [voterId], references: [id])
-  user      User     @relation("VotesReceived", fields: [userId], references: [id])
-  voterId   Int
-  userId    Int
+  id         Int      @id @default(autoincrement())
+  value      Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  voter      User     @relation("VotesGiven", fields: [voter_id], references: [id])
+  user       User     @relation("VotesReceived", fields: [user_id], references: [id])
+  voter_id   Int
+  user_id    Int
+
+  @@map("votes")
+}
+
+model Guild {
+  id                Int      @id @default(autoincrement())
+  name              String
+  icon              String
+  discord_guild_id  String
+  users           UserGuild[]
+
+  @@map("guilds")
+}
+
+model UserGuild {
+  user_id   Int
+  guild_id  Int
+  user      User     @relation(fields: [user_id], references: [id])
+  guild     Guild    @relation(fields: [guild_id], references: [id])
+
+  @@id([user_id, guild_id])
+  @@map("user_guilds")
 }

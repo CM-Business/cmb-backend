@@ -6,7 +6,7 @@ function discord(): void {
             clientID: process.env.DISCORD_CLIENT_ID,
             clientSecret: process.env.DISCORD_CLIENT_SECRET,
             callbackURL: "/auth/redirect",
-            scope: ['identify', 'email']
+            scope: ['identify', 'email', 'guilds']
         }, async (_, refreshToken, profile, done) => {
             profile.refreshToken = refreshToken;
 

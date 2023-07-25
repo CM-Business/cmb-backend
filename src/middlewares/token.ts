@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { Request, Response, NextFunction } from 'express';
 import { MUser } from '../models/mUser.js';
 import { User } from '../types/index.js';
+import { discordUserInfo } from '../helpers/discord/index.js';
 
 function cookieExtractor(req): string {
     let token = null;
@@ -14,17 +14,18 @@ function cookieExtractor(req): string {
 
 async function verifyToken(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-        const user: User = await axios.get(`${process.env.DISCORD_API_BASE_URL}/users/@me`, {
-            headers: {
-                Authorization: `Bearer ${cookieExtractor(req)}`,
-            },
-        }).then((res) => res.data);
+        const token = cookieExtractor(req);
+
+        const user: User = await discordUserInfo(token);
 
         if (!user) {
             return res.redirect('/auth');
         }
 
-        req.user = await MUser.findByEmail(user.email);
+        req.user = await MUser.findByEmail(user.email)
+        req.user.accessToken = token;
+
+
         next();
     } catch (error) {
         return res.redirect('/auth');

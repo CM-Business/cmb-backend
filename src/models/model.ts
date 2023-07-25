@@ -1,27 +1,23 @@
 import { prisma } from "../prisma.client.js";
-import { User, Vote } from '@prisma/client'
+import { User, Vote, Guild, UserGuild } from '@prisma/client'
 
-type GenericInterface = User | Vote
+type GenericInterface = User | Vote | Guild | UserGuild
 
 export abstract class Model {
-    protected table = ""
+    protected prismaModel = ""
     async all(): Promise<Array<GenericInterface>> {
-        return await prisma[this.table].findMany()
+        return await prisma[this.prismaModel].findMany()
     }
 
     async store<T>(data: GenericInterface): Promise<T> {
-        if (data.id) {
-            delete data.id
-        }
-
-        const allowed = Object.keys(prisma[this.table].fields);
+        const allowed = Object.keys(prisma[this.prismaModel].fields);
         for (const field in data) {
             if (!allowed.includes(field)) {
                 delete data[field]
             }
         }
 
-        return await prisma[this.table].create({
+        return await prisma[this.prismaModel].create({
             data
         })
     }

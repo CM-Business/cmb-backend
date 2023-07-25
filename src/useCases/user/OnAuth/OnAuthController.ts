@@ -17,7 +17,7 @@ export class OnAuthController {
                 await this.createUserUseCase.execute(request.user)
             }
 
-            response.status(200).json({});
+            response.redirect(process.env.FRONTEND_URL + "/dashboard");
         } catch (error) {
             console.log(error)
             response.status(400).json({});
